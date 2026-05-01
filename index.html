@@ -1,13 +1,209 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Estoque Hospitalar</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EstoqueHosp — Controle de Estoque Hospitalar</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-logo">
+      <span class="logo-icon">⊕</span>
+      <span class="logo-text">EstoqueHosp</span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+      <button class="nav-btn" data-section="estoque">Estoque</button>
+      <button class="nav-btn" data-section="alertas">Alertas</button>
+    </nav>
+    <div class="header-info">
+      <span id="relogio" class="relogio"></span>
+    </div>
+  </header>
+
+  <!-- ALERTAS BANNER -->
+  <div id="alertas-banner" class="alertas-banner hidden"></div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- SECTION: DASHBOARD -->
+    <section id="section-dashboard" class="section active">
+      <div class="section-title">
+        <h1>Dashboard</h1>
+        <p>Visão geral do estoque hospitalar</p>
+      </div>
+      <div class="cards-grid" id="cards-dashboard"></div>
+      <div class="dashboard-bottom">
+        <div class="card tabela-card">
+          <div class="card-header">
+            <h2>Movimentações Recentes</h2>
+          </div>
+          <table class="tabela" id="tabela-movimentacoes">
+            <thead>
+              <tr>
+                <th>Item</th><th>Tipo</th><th>Qtd</th><th>Data</th><th>Responsável</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-movimentacoes"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: ESTOQUE -->
+    <section id="section-estoque" class="section">
+      <div class="section-title">
+        <h1>Controle de Estoque</h1>
+        <p>Gerencie todos os itens do estoque</p>
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <div class="card form-card">
+        <div class="card-header">
+          <h2 id="form-titulo">Adicionar Item</h2>
+          <button class="btn btn-ghost" id="btn-cancelar-edicao" style="display:none">✕ Cancelar</button>
+        </div>
+        <div class="form-grid">
+          <div class="campo">
+            <label>Nome do Item</label>
+            <input type="text" id="input-nome" placeholder="Ex: Seringa 10ml" />
+          </div>
+          <div class="campo">
+            <label>Categoria</label>
+            <select id="input-categoria">
+              <option value="">Selecione...</option>
+              <option value="Medicamento">Medicamento</option>
+              <option value="Material Cirúrgico">Material Cirúrgico</option>
+              <option value="EPI">EPI</option>
+              <option value="Equipamento">Equipamento</option>
+              <option value="Laboratório">Laboratório</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label>Quantidade</label>
+            <input type="number" id="input-quantidade" placeholder="0" min="0" />
+          </div>
+          <div class="campo">
+            <label>Estoque Mínimo</label>
+            <input type="number" id="input-minimo" placeholder="0" min="0" />
+          </div>
+          <div class="campo">
+            <label>Unidade</label>
+            <input type="text" id="input-unidade" placeholder="Ex: unid, caixa, frasco" />
+          </div>
+          <div class="campo">
+            <label>Validade</label>
+            <input type="date" id="input-validade" />
+          </div>
+          <div class="campo campo-full">
+            <label>Localização</label>
+            <input type="text" id="input-localizacao" placeholder="Ex: Armário A - Prateleira 2" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="btn-salvar">＋ Adicionar Item</button>
+        </div>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="filtros">
+        <input type="text" id="filtro-busca" placeholder="🔍 Buscar item..." class="input-busca" />
+        <select id="filtro-categoria" class="select-filtro">
+          <option value="">Todas categorias</option>
+          <option value="Medicamento">Medicamento</option>
+          <option value="Material Cirúrgico">Material Cirúrgico</option>
+          <option value="EPI">EPI</option>
+          <option value="Equipamento">Equipamento</option>
+          <option value="Laboratório">Laboratório</option>
+          <option value="Outros">Outros</option>
+        </select>
+        <select id="filtro-status" class="select-filtro">
+          <option value="">Todos status</option>
+          <option value="ok">Normal</option>
+          <option value="baixo">Estoque Baixo</option>
+          <option value="critico">Crítico</option>
+          <option value="vencido">Vencido/Vencendo</option>
+        </select>
+      </div>
+
+      <!-- TABELA ESTOQUE -->
+      <div class="card tabela-card">
+        <table class="tabela" id="tabela-estoque">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Categoria</th>
+              <th>Qtd</th>
+              <th>Mínimo</th>
+              <th>Unidade</th>
+              <th>Validade</th>
+              <th>Localização</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-estoque"></tbody>
+        </table>
+        <div id="estoque-vazio" class="vazio hidden">Nenhum item encontrado.</div>
+      </div>
+    </section>
+
+    <!-- SECTION: ALERTAS -->
+    <section id="section-alertas" class="section">
+      <div class="section-title">
+        <h1>Central de Alertas</h1>
+        <p>Itens que precisam de atenção</p>
+      </div>
+      <div id="lista-alertas"></div>
+    </section>
+
+  </main>
+
+  <!-- MODAL MOVIMENTAÇÃO -->
+  <div id="modal-mov" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Registrar Movimentação</h2>
+        <button class="btn btn-ghost" id="btn-fechar-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-item-nome" class="modal-item-nome"></p>
+        <div class="campo">
+          <label>Tipo</label>
+          <select id="mov-tipo">
+            <option value="entrada">Entrada</option>
+            <option value="saida">Saída</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Quantidade</label>
+          <input type="number" id="mov-qtd" min="1" placeholder="0" />
+        </div>
+        <div class="campo">
+          <label>Responsável</label>
+          <input type="text" id="mov-responsavel" placeholder="Nome do responsável" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="btn-cancelar-mov">Cancelar</button>
+        <button class="btn btn-primary" id="btn-confirmar-mov">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/estoque.js"></script>
+  <script src="js/alertas.js"></script>
+  <script src="js/main.js"></script>
+
+    <!-- CRUD genérico — não altera o código acima -->
+  <script src="js/crud.js"></script>
+  <script src="js/crud-ui.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => CrudUI.init());</script>
 </body>
 </html>
