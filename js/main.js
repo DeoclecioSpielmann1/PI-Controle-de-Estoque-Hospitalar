@@ -1,8 +1,6 @@
-// ============================================================
-//  main.js — Controlador principal da interface
-// ============================================================
+//  main.js — Controlador principal da interface do sistema
 
-// ---------- NAVEGAÇÃO ----------
+// -- NAVEGAÇÃO --
 
 function initNav() {
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -11,7 +9,7 @@ function initNav() {
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById('section-' + target).classList.add('active');
+      document.getElementById('section-' + target)?.classList.add('active');
 
       if (target === 'dashboard') renderDashboard();
       if (target === 'estoque')   renderTabelaEstoque();
@@ -20,14 +18,13 @@ function initNav() {
   });
 }
 
-// ---------- RELÓGIO ----------
+// -- RELÓGIO --
 
 function initRelogio() {
   function atualizar() {
     const el = document.getElementById('relogio');
     if (!el) return;
-    const now = new Date();
-    el.textContent = now.toLocaleString('pt-BR', {
+    el.textContent = new Date().toLocaleString('pt-BR', {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit', second: '2-digit'
     });
@@ -36,7 +33,7 @@ function initRelogio() {
   setInterval(atualizar, 1000);
 }
 
-// ---------- DASHBOARD ----------
+// -- DASHBOARD --
 
 function renderDashboard() {
   const stats = Estoque.getStats();
@@ -69,7 +66,7 @@ function renderDashboard() {
     </div>
   `;
 
-  const movs = Estoque.carregarMovimentacoes().slice(0, 10);
+  const movs  = Estoque.carregarMovimentacoes().slice(0, 10);
   const tbody = document.getElementById('tbody-movimentacoes');
 
   if (movs.length === 0) {
@@ -87,12 +84,12 @@ function renderDashboard() {
     </tr>`).join('');
 }
 
-// ---------- TABELA ESTOQUE ----------
+// -- TABELA ESTOQUE --
 
 function renderTabelaEstoque(filtros = {}) {
-  const itens  = Estoque.filtrarItens(filtros);
-  const tbody  = document.getElementById('tbody-estoque');
-  const vazio  = document.getElementById('estoque-vazio');
+  const itens = Estoque.filtrarItens(filtros);
+  const tbody = document.getElementById('tbody-estoque');
+  const vazio = document.getElementById('estoque-vazio');
 
   if (itens.length === 0) {
     tbody.innerHTML = '';
@@ -102,7 +99,7 @@ function renderTabelaEstoque(filtros = {}) {
 
   vazio.classList.add('hidden');
   tbody.innerHTML = itens.map(item => {
-    const status = Estoque.getStatus(item);
+    const status          = Estoque.getStatus(item);
     const { label, badge } = Estoque.getLabelStatus(status);
     return `
       <tr>
@@ -116,8 +113,8 @@ function renderTabelaEstoque(filtros = {}) {
         <td><span class="badge ${badge}">${label}</span></td>
         <td>
           <div class="acoes">
-            <button class="btn btn-sm btn-info" onclick="abrirModalMovimentacao(${item.id})">↕</button>
-            <button class="btn btn-sm btn-ghost" onclick="iniciarEdicao(${item.id})">✏️</button>
+            <button class="btn btn-sm btn-info"   onclick="abrirModalMovimentacao(${item.id})">↕</button>
+            <button class="btn btn-sm btn-ghost"  onclick="iniciarEdicao(${item.id})">✏️</button>
             <button class="btn btn-sm btn-danger" onclick="confirmarRemocao(${item.id})">🗑</button>
           </div>
         </td>
@@ -125,7 +122,7 @@ function renderTabelaEstoque(filtros = {}) {
   }).join('');
 }
 
-// ---------- FORMULÁRIO ----------
+// -- FORMULÁRIO DE ESTOQUE --
 
 let idEmEdicao = null;
 
@@ -150,8 +147,8 @@ function iniciarEdicao(id) {
   document.getElementById('input-validade').value    = item.validade || '';
   document.getElementById('input-localizacao').value = item.localizacao || '';
 
-  document.getElementById('form-titulo').textContent    = 'Editar Item';
-  document.getElementById('btn-salvar').textContent     = '💾 Salvar Alterações';
+  document.getElementById('form-titulo').textContent           = 'Editar Item';
+  document.getElementById('btn-salvar').textContent            = '💾 Salvar Alterações';
   document.getElementById('btn-cancelar-edicao').style.display = 'inline-flex';
 
   document.querySelector('#section-estoque').scrollIntoView({ behavior: 'smooth' });
@@ -160,8 +157,8 @@ function iniciarEdicao(id) {
 function cancelarEdicao() {
   idEmEdicao = null;
   limparFormulario();
-  document.getElementById('form-titulo').textContent    = 'Adicionar Item';
-  document.getElementById('btn-salvar').textContent     = '＋ Adicionar Item';
+  document.getElementById('form-titulo').textContent           = 'Adicionar Item';
+  document.getElementById('btn-salvar').textContent            = '＋ Adicionar Item';
   document.getElementById('btn-cancelar-edicao').style.display = 'none';
 }
 
@@ -201,8 +198,7 @@ function confirmarRemocao(id) {
   }
 }
 
-// ---------- MODAL MOVIMENTAÇÃO ----------
-
+// -- MODAL DE MOVIMENTAÇÃO --
 let itemMovAtivo = null;
 
 function abrirModalMovimentacao(id) {
@@ -210,9 +206,9 @@ function abrirModalMovimentacao(id) {
   if (!item) return;
   itemMovAtivo = id;
   document.getElementById('modal-item-nome').textContent = item.nome;
-  document.getElementById('mov-qtd').value = '';
+  document.getElementById('mov-qtd').value        = '';
   document.getElementById('mov-responsavel').value = '';
-  document.getElementById('mov-tipo').value = 'entrada';
+  document.getElementById('mov-tipo').value        = 'entrada';
   document.getElementById('modal-mov').classList.remove('hidden');
 }
 
@@ -230,17 +226,14 @@ function confirmarMovimentacao() {
 
   const result = Estoque.registrarMovimentacao(itemMovAtivo, tipo, qtd, responsavel);
 
-  if (!result.sucesso) {
-    alert(result.msg);
-    return;
-  }
+  if (!result.sucesso) { alert(result.msg); return; }
 
   fecharModal();
   renderTabelaEstoque(getFiltrosAtivos());
   Alertas.atualizarBanner();
 }
 
-// ---------- FILTROS ----------
+// -- FILTROS --
 
 function getFiltrosAtivos() {
   return {
@@ -252,12 +245,12 @@ function getFiltrosAtivos() {
 
 function initFiltros() {
   ['filtro-busca','filtro-categoria','filtro-status'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('input', () => renderTabelaEstoque(getFiltrosAtivos()));
+    document.getElementById(id)
+      ?.addEventListener('input', () => renderTabelaEstoque(getFiltrosAtivos()));
   });
 }
 
-// ---------- UTILITÁRIOS ----------
+// -- UTILITÁRIOS --
 
 function formatarData(dataStr) {
   if (!dataStr) return '—';
@@ -267,29 +260,46 @@ function formatarData(dataStr) {
 
 function formatarDataHora(iso) {
   if (!iso) return '—';
-  const d = new Date(iso);
-  return d.toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit'
+  return new Date(iso).toLocaleString('pt-BR', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
   });
 }
 
-// ---------- INIT ----------
+// ---------- INICIALIZAÇÃO DO SISTEMA ----------
 
-document.addEventListener('DOMContentLoaded', () => {
+function iniciarSistema() {
   initNav();
   initRelogio();
   renderDashboard();
   initFiltros();
 
-  document.getElementById('btn-salvar').addEventListener('click', salvarItem);
-  document.getElementById('btn-cancelar-edicao').addEventListener('click', cancelarEdicao);
-  document.getElementById('btn-confirmar-mov').addEventListener('click', confirmarMovimentacao);
-  document.getElementById('btn-fechar-modal').addEventListener('click', fecharModal);
-  document.getElementById('btn-cancelar-mov').addEventListener('click', fecharModal);
-  document.getElementById('modal-mov').addEventListener('click', e => {
-    if (e.target === document.getElementById('modal-mov')) fecharModal();
-  });
+  document.getElementById('btn-salvar')
+    ?.addEventListener('click', salvarItem);
+  document.getElementById('btn-cancelar-edicao')
+    ?.addEventListener('click', cancelarEdicao);
+  document.getElementById('btn-confirmar-mov')
+    ?.addEventListener('click', confirmarMovimentacao);
+  document.getElementById('btn-fechar-modal')
+    ?.addEventListener('click', fecharModal);
+  document.getElementById('btn-cancelar-mov')
+    ?.addEventListener('click', fecharModal);
+  document.getElementById('modal-mov')
+    ?.addEventListener('click', e => {
+      if (e.target === document.getElementById('modal-mov')) fecharModal();
+    });
 
   Alertas.atualizarBanner();
+
+  // Inicia o CRUD de fornecedores, usuários e categorias
+  if (typeof CrudUI !== 'undefined') CrudUI.init();
+}
+
+// Expõe globalmente para o login.js chamar após autenticar
+window.iniciarSistema = iniciarSistema;
+
+document.addEventListener('DOMContentLoaded', () => {
+  // O sistema só inicia de verdade quando o login liberar
+  // Mas se já estiver autenticado (verificarSessao retorna true), 
+  // o login.js chama iniciarSistema via observação do DOM
 });

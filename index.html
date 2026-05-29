@@ -1,69 +1,95 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MedStok — Controle de Estoque Hospitalar</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedStok — Controle de Estoque Hospitalar</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+
+  <!--TELA DE LOGIN-->
+  <div id="tela-login">
+    <div class="login-box">
+
+      <!-- Logo -->
+      <div class="login-logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#0d1f12"/>
+          <polygon points="16,5 26,10 16,15 6,10" fill="#26a65b"/>
+          <polygon points="6,10 16,15 16,25 6,20" fill="#1a7040"/>
+          <polygon points="26,10 16,15 16,25 26,20" fill="#0f4a2a"/>
+          <line x1="6" y1="10" x2="16" y2="5" stroke="#4ade80" stroke-width="0.6" opacity="0.5"/>
+          <line x1="16" y1="5" x2="26" y2="10" stroke="#4ade80" stroke-width="0.6" opacity="0.5"/>
+        </svg>
+        <span>MedStok</span>
+      </div>
+
+      <p class="login-title">Acesso ao Sistema</p>
+      <p class="login-sub">Controle de Estoque Hospitalar</p>
+
+      <!-- Campos -->
+      <div class="campo">
+        <label>Usuário</label>
+        <input type="text" id="login-usuario" placeholder="Digite seu usuário" autocomplete="username" />
+      </div>
+      <div class="campo">
+        <label>Senha</label>
+        <input type="password" id="login-senha" placeholder="Digite sua senha" autocomplete="current-password" />
+      </div>
+
+      <button class="btn-login" id="btn-entrar">Entrar</button>
+
+
+      <div class="login-erro" id="login-erro"></div>
+
+      <div class="login-dica">
+        💡 Credenciais: <strong>admin</strong> / <strong>admin</strong>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="tela-sistema">
+
+    <!-- CABEÇALHO -->
     <header class="header">
       <div class="header-logo">
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style="flex-shrink: 0"
-        >
-          <rect width="32" height="32" rx="8" fill="#0d1f12" />
-          <polygon points="16,5 26,10 16,15 6,10" fill="#26a65b" />
-          <polygon points="6,10 16,15 16,25 6,20" fill="#1a7040" />
-          <polygon points="26,10 16,15 16,25 26,20" fill="#0f4a2a" />
-          <line
-            x1="6"
-            y1="10"
-            x2="16"
-            y2="5"
-            stroke="#4ade80"
-            stroke-width="0.6"
-            opacity="0.5"
-          />
-          <line
-            x1="16"
-            y1="5"
-            x2="26"
-            y2="10"
-            stroke="#4ade80"
-            stroke-width="0.6"
-            opacity="0.5"
-          />
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+          <rect width="32" height="32" rx="8" fill="#0d1f12"/>
+          <polygon points="16,5 26,10 16,15 6,10" fill="#26a65b"/>
+          <polygon points="6,10 16,15 16,25 6,20" fill="#1a7040"/>
+          <polygon points="26,10 16,15 16,25 26,20" fill="#0f4a2a"/>
+          <line x1="6" y1="10" x2="16" y2="5" stroke="#4ade80" stroke-width="0.6" opacity="0.5"/>
+          <line x1="16" y1="5" x2="26" y2="10" stroke="#4ade80" stroke-width="0.6" opacity="0.5"/>
         </svg>
         <span class="logo-text">MedStok</span>
       </div>
+
       <nav class="header-nav">
-        <button class="nav-btn active" data-section="dashboard">
-          Dashboard
-        </button>
+        <button class="nav-btn active" data-section="dashboard">Dashboard</button>
         <button class="nav-btn" data-section="estoque">Estoque</button>
         <button class="nav-btn" data-section="alertas">Alertas</button>
       </nav>
+
       <div class="header-info">
         <span id="relogio" class="relogio"></span>
+        <span id="nome-usuario-logado" style="font-size:12px;color:var(--text3)"></span>
+        <button class="btn-sair" id="btn-sair">Sair</button>
       </div>
     </header>
 
-    <!-- ALERTAS BANNER -->
+    <!-- BANNER DE ALERTAS -->
     <div id="alertas-banner" class="alertas-banner hidden"></div>
 
-    <!-- MAIN -->
+    <!-- CONTEÚDO PRINCIPAL -->
     <main class="main">
-      <!-- SECTION: DASHBOARD -->
+
+      <!-- DASHBOARD -->
       <section id="section-dashboard" class="section active">
         <div class="section-title">
           <h1>Dashboard</h1>
@@ -75,7 +101,7 @@
             <div class="card-header">
               <h2>Movimentações Recentes</h2>
             </div>
-            <table class="tabela" id="tabela-movimentacoes">
+            <table class="tabela">
               <thead>
                 <tr>
                   <th>Item</th>
@@ -91,33 +117,23 @@
         </div>
       </section>
 
-      <!-- SECTION: ESTOQUE -->
+      <!-- ESTOQUE -->
       <section id="section-estoque" class="section">
         <div class="section-title">
           <h1>Controle de Estoque</h1>
           <p>Gerencie todos os itens do estoque</p>
         </div>
 
-        <!-- FORMULÁRIO -->
+        <!-- Formulário de cadastro/edição -->
         <div class="card form-card">
           <div class="card-header">
             <h2 id="form-titulo">Adicionar Item</h2>
-            <button
-              class="btn btn-ghost"
-              id="btn-cancelar-edicao"
-              style="display: none"
-            >
-              ✕ Cancelar
-            </button>
+            <button class="btn btn-ghost" id="btn-cancelar-edicao" style="display:none">✕ Cancelar</button>
           </div>
           <div class="form-grid">
             <div class="campo">
               <label>Nome do Item</label>
-              <input
-                type="text"
-                id="input-nome"
-                placeholder="Ex: Seringa 10ml"
-              />
+              <input type="text" id="input-nome" placeholder="Ex: Seringa 10ml" />
             </div>
             <div class="campo">
               <label>Categoria</label>
@@ -133,12 +149,7 @@
             </div>
             <div class="campo">
               <label>Quantidade</label>
-              <input
-                type="number"
-                id="input-quantidade"
-                placeholder="0"
-                min="0"
-              />
+              <input type="number" id="input-quantidade" placeholder="0" min="0" />
             </div>
             <div class="campo">
               <label>Estoque Mínimo</label>
@@ -146,11 +157,7 @@
             </div>
             <div class="campo">
               <label>Unidade</label>
-              <input
-                type="text"
-                id="input-unidade"
-                placeholder="Ex: unid, caixa, frasco"
-              />
+              <input type="text" id="input-unidade" placeholder="Ex: unid, caixa, frasco" />
             </div>
             <div class="campo">
               <label>Validade</label>
@@ -158,28 +165,17 @@
             </div>
             <div class="campo campo-full">
               <label>Localização</label>
-              <input
-                type="text"
-                id="input-localizacao"
-                placeholder="Ex: Armário A - Prateleira 2"
-              />
+              <input type="text" id="input-localizacao" placeholder="Ex: Armário A - Prateleira 2" />
             </div>
           </div>
           <div class="form-actions">
-            <button class="btn btn-primary" id="btn-salvar">
-              ＋ Adicionar Item
-            </button>
+            <button class="btn btn-primary" id="btn-salvar">＋ Adicionar Item</button>
           </div>
         </div>
 
-        <!-- FILTROS -->
+        <!-- Filtros -->
         <div class="filtros">
-          <input
-            type="text"
-            id="filtro-busca"
-            placeholder="🔍 Buscar item..."
-            class="input-busca"
-          />
+          <input type="text" id="filtro-busca" placeholder="🔍 Buscar item..." class="input-busca" />
           <select id="filtro-categoria" class="select-filtro">
             <option value="">Todas categorias</option>
             <option value="Medicamento">Medicamento</option>
@@ -198,9 +194,9 @@
           </select>
         </div>
 
-        <!-- TABELA ESTOQUE -->
+        <!-- Tabela de estoque -->
         <div class="card tabela-card">
-          <table class="tabela" id="tabela-estoque">
+          <table class="tabela">
             <thead>
               <tr>
                 <th>Item</th>
@@ -216,13 +212,11 @@
             </thead>
             <tbody id="tbody-estoque"></tbody>
           </table>
-          <div id="estoque-vazio" class="vazio hidden">
-            Nenhum item encontrado.
-          </div>
+          <div id="estoque-vazio" class="vazio hidden">Nenhum item encontrado.</div>
         </div>
       </section>
 
-      <!-- SECTION: ALERTAS -->
+      <!-- ALERTAS -->
       <section id="section-alertas" class="section">
         <div class="section-title">
           <h1>Central de Alertas</h1>
@@ -230,9 +224,10 @@
         </div>
         <div id="lista-alertas"></div>
       </section>
+
     </main>
 
-    <!-- MODAL MOVIMENTAÇÃO -->
+    <!-- MOVIMENTAÇÃO -->
     <div id="modal-mov" class="modal-overlay hidden">
       <div class="modal">
         <div class="modal-header">
@@ -254,31 +249,25 @@
           </div>
           <div class="campo">
             <label>Responsável</label>
-            <input
-              type="text"
-              id="mov-responsavel"
-              placeholder="Nome do responsável"
-            />
+            <input type="text" id="mov-responsavel" placeholder="Nome do responsável" />
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-ghost" id="btn-cancelar-mov">Cancelar</button>
-          <button class="btn btn-primary" id="btn-confirmar-mov">
-            Confirmar
-          </button>
+          <button class="btn btn-primary" id="btn-confirmar-mov">Confirmar</button>
         </div>
       </div>
     </div>
 
-    <script src="js/estoque.js"></script>
-    <script src="js/alertas.js"></script>
-    <script src="js/main.js"></script>
+  </div>
 
-    <!-- CRUD genérico — não altera o código acima -->
-    <script src="js/crud.js"></script>
-    <script src="js/crud-ui.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => CrudUI.init());
-    </script>
-  </body>
+
+  <script src="js/estoque.js"></script>
+  <script src="js/alertas.js"></script>
+  <script src="js/crud.js"></script>
+  <script src="js/crud-ui.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/login.js"></script>
+
+</body>
 </html>

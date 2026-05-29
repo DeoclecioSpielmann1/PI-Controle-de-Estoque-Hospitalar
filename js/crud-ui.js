@@ -1,11 +1,8 @@
 // ============================================================
-//  crud-ui.js — Interface visual CRUD (não altera código existente)
-//  Injeta seções dinâmicas no index.html via CrudUI.init()
+//  crud-ui.js — Interface visual CRUD
 // ============================================================
 
 const CrudUI = (() => {
-
-  // Mapa entidade → repositório
   const repositorios = {
     fornecedores: () => RepFornecedores,
     usuarios:     () => RepUsuarios,
@@ -15,27 +12,21 @@ const CrudUI = (() => {
   let entidadeAtiva = null;
   let idEmEdicao    = null;
 
-  // ---------- INICIALIZAÇÃO ----------
-
   function init() {
     _injetarNavButtons();
     _injetarSections();
-    _injetarStylesExtras();
   }
 
-  // Adiciona botões na nav existente
   function _injetarNavButtons() {
     const nav = document.querySelector('.header-nav');
     if (!nav) return;
-
     const entidades = [
       { key: 'fornecedores', label: 'Fornecedores' },
       { key: 'usuarios',     label: 'Usuários' },
       { key: 'categorias',   label: 'Categorias' }
     ];
-
     entidades.forEach(({ key, label }) => {
-      if (nav.querySelector(`[data-section="${key}"]`)) return; // já existe
+      if (nav.querySelector(`[data-section="${key}"]`)) return;
       const btn = document.createElement('button');
       btn.className = 'nav-btn';
       btn.dataset.section = key;
@@ -45,13 +36,11 @@ const CrudUI = (() => {
     });
   }
 
-  // Cria as sections no main
   function _injetarSections() {
     const main = document.querySelector('.main');
     if (!main) return;
-
     Object.keys(Schemas).forEach(key => {
-      if (document.getElementById(`section-${key}`)) return; // já existe
+      if (document.getElementById(`section-${key}`)) return;
       const section = document.createElement('section');
       section.id        = `section-${key}`;
       section.className = 'section';
@@ -61,23 +50,16 @@ const CrudUI = (() => {
     });
   }
 
-  // ---------- NAVEGAÇÃO ----------
-
   function _abrirSecao(key) {
-    // desativa todos (incluindo os do sistema existente)
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-
     document.querySelector(`[data-section="${key}"]`)?.classList.add('active');
     document.getElementById(`section-${key}`)?.classList.add('active');
-
     entidadeAtiva = key;
     idEmEdicao    = null;
     _renderTabela(key);
     _resetForm(key);
   }
-
-  // ---------- TEMPLATES HTML ----------
 
   function _templateSection(key) {
     const schema = Schemas[key];
@@ -86,29 +68,21 @@ const CrudUI = (() => {
         <h1>${schema.nome}s</h1>
         <p>Cadastro e gerenciamento de ${schema.nome.toLowerCase()}s</p>
       </div>
-
-      <!-- FORMULÁRIO -->
       <div class="card form-card" id="form-card-${key}">
         <div class="card-header">
           <h2 id="form-titulo-${key}">Novo ${schema.nome}</h2>
           <button class="btn btn-ghost" id="btn-cancelar-${key}" style="display:none">✕ Cancelar</button>
         </div>
-        <div class="form-grid" id="form-campos-${key}">
-          ${_renderCampos(schema)}
-        </div>
+        <div class="form-grid" id="form-campos-${key}">${_renderCampos(schema)}</div>
         <div class="form-actions">
           <button class="btn btn-primary" id="btn-salvar-${key}">＋ Adicionar</button>
         </div>
         <div id="form-erros-${key}" class="form-erros hidden"></div>
       </div>
-
-      <!-- FILTROS -->
       <div class="filtros">
         <input type="text" class="input-busca" id="busca-${key}" placeholder="🔍 Buscar ${schema.nome.toLowerCase()}..." />
         ${_renderFiltroStatus(key)}
       </div>
-
-      <!-- TABELA -->
       <div class="card tabela-card">
         <div class="card-header">
           <h2>Registros</h2>
@@ -121,28 +95,16 @@ const CrudUI = (() => {
           </table>
         </div>
         <div id="vazio-${key}" class="vazio hidden">Nenhum registro encontrado.</div>
-      </div>
-    `;
+      </div>`;
   }
 
   function _renderCampos(schema) {
     return schema.campos.map(campo => {
       const id = `campo-${schema.nome.toLowerCase()}-${campo.nome}`;
-      let input = '';
-
-      if (campo.tipo === 'select') {
-        input = `<select id="${id}">
-          <option value="">Selecione...</option>
-          ${campo.opcoes.map(o => `<option value="${o}">${o}</option>`).join('')}
-        </select>`;
-      } else {
-        input = `<input type="${campo.tipo}" id="${id}" placeholder="${campo.label}" />`;
-      }
-
-      return `<div class="campo">
-        <label>${campo.label}${campo.obrigatorio ? ' <span style="color:var(--danger-light)">*</span>' : ''}</label>
-        ${input}
-      </div>`;
+      let input = campo.tipo === 'select'
+        ? `<select id="${id}"><option value="">Selecione...</option>${campo.opcoes.map(o => `<option value="${o}">${o}</option>`).join('')}</select>`
+        : `<input type="${campo.tipo}" id="${id}" placeholder="${campo.label}" />`;
+      return `<div class="campo"><label>${campo.label}${campo.obrigatorio ? ' <span style="color:var(--danger-light)">*</span>' : ''}</label>${input}</div>`;
     }).join('');
   }
 
@@ -156,41 +118,21 @@ const CrudUI = (() => {
     </select>`;
   }
 
-  // ---------- BIND DE EVENTOS ----------
-
   function _bindEventosSection(key) {
-    // aguarda o DOM ser injetado
     setTimeout(() => {
-      document.getElementById(`btn-salvar-${key}`)
-        ?.addEventListener('click', () => _salvar(key));
-
-      document.getElementById(`btn-cancelar-${key}`)
-        ?.addEventListener('click', () => _cancelarEdicao(key));
-
-      document.getElementById(`busca-${key}`)
-        ?.addEventListener('input', () => _renderTabela(key));
-
-      document.getElementById(`filtro-ativo-${key}`)
-        ?.addEventListener('change', () => _renderTabela(key));
+      document.getElementById(`btn-salvar-${key}`)?.addEventListener('click', () => _salvar(key));
+      document.getElementById(`btn-cancelar-${key}`)?.addEventListener('click', () => _cancelarEdicao(key));
+      document.getElementById(`busca-${key}`)?.addEventListener('input', () => _renderTabela(key));
+      document.getElementById(`filtro-ativo-${key}`)?.addEventListener('change', () => _renderTabela(key));
     }, 50);
   }
-
-  // ---------- CRUD ----------
 
   function _salvar(key) {
     const rep    = repositorios[key]();
     const schema = Schemas[key];
     const dados  = _coletarForm(key, schema);
-
-    const resultado = idEmEdicao
-      ? rep.atualizar(idEmEdicao, dados)
-      : rep.criar(dados);
-
-    if (!resultado.sucesso) {
-      _mostrarErros(key, resultado.erros);
-      return;
-    }
-
+    const resultado = idEmEdicao ? rep.atualizar(idEmEdicao, dados) : rep.criar(dados);
+    if (!resultado.sucesso) { _mostrarErros(key, resultado.erros); return; }
     _esconderErros(key);
     _cancelarEdicao(key);
     _renderTabela(key);
@@ -201,15 +143,13 @@ const CrudUI = (() => {
     const schema = Schemas[key];
     const item   = rep.buscarPorId(id);
     if (!item) return;
-
     idEmEdicao = id;
     schema.campos.forEach(campo => {
       const el = document.getElementById(`campo-${schema.nome.toLowerCase()}-${campo.nome}`);
       if (el) el.value = item[campo.nome] ?? '';
     });
-
-    document.getElementById(`form-titulo-${key}`).textContent = `Editar ${schema.nome}`;
-    document.getElementById(`btn-salvar-${key}`).textContent  = '💾 Salvar';
+    document.getElementById(`form-titulo-${key}`).textContent    = `Editar ${schema.nome}`;
+    document.getElementById(`btn-salvar-${key}`).textContent     = '💾 Salvar';
     document.getElementById(`btn-cancelar-${key}`).style.display = 'inline-flex';
     document.getElementById(`form-card-${key}`)?.scrollIntoView({ behavior: 'smooth' });
   }
@@ -218,10 +158,8 @@ const CrudUI = (() => {
     const rep  = repositorios[key]();
     const item = rep.buscarPorId(id);
     if (!item) return;
-
     const nomeItem = item.razaoSocial || item.nome || `#${id}`;
     if (!confirm(`Excluir "${nomeItem}"?`)) return;
-
     rep.excluir(id);
     _renderTabela(key);
   }
@@ -235,27 +173,22 @@ const CrudUI = (() => {
     _esconderErros(key);
   }
 
-  // ---------- TABELA ----------
-
   function _renderTabela(key) {
     const rep    = repositorios[key]();
     const schema = Schemas[key];
-
     const filtros = { busca: document.getElementById(`busca-${key}`)?.value || '' };
     const filtroAtivo = document.getElementById(`filtro-ativo-${key}`)?.value;
     if (filtroAtivo) filtros.ativo = filtroAtivo;
-
     const registros = rep.listar(filtros);
 
-    // thead dinâmico
     const thead = document.getElementById(`thead-${key}`);
     if (thead && thead.children.length === 0) {
       thead.innerHTML = schema.campos.map(c => `<th>${c.label}</th>`).join('') + '<th>Criado em</th><th>Ações</th>';
     }
 
-    const tbody  = document.getElementById(`tbody-${key}`);
-    const vazio  = document.getElementById(`vazio-${key}`);
-    const cont   = document.getElementById(`contagem-${key}`);
+    const tbody = document.getElementById(`tbody-${key}`);
+    const vazio = document.getElementById(`vazio-${key}`);
+    const cont  = document.getElementById(`contagem-${key}`);
 
     if (cont) cont.textContent = `${registros.length} registro(s)`;
 
@@ -269,49 +202,28 @@ const CrudUI = (() => {
     tbody.innerHTML = registros.map(item => {
       const celulas = schema.campos.map(campo => {
         const val = item[campo.nome] ?? '—';
-        if (campo.nome === 'ativo') {
-          return `<td><span class="badge ${val === 'Sim' ? 'badge-ok' : 'badge-critico'}">${val}</span></td>`;
-        }
+        if (campo.nome === 'ativo') return `<td><span class="badge ${val === 'Sim' ? 'badge-ok' : 'badge-critico'}">${val}</span></td>`;
         return `<td>${val}</td>`;
       }).join('');
-
-      return `<tr>
-        ${celulas}
-        <td style="font-size:11px;color:var(--text3)">${_formatarData(item.criadoEm)}</td>
-        <td>
-          <div class="acoes">
-            <button class="btn btn-sm btn-ghost" onclick="CrudUI._iniciarEdicao('${key}', ${item.id})">✏️</button>
-            <button class="btn btn-sm btn-danger" onclick="CrudUI._excluir('${key}', ${item.id})">🗑</button>
-          </div>
-        </td>
-      </tr>`;
+      return `<tr>${celulas}<td style="font-size:11px;color:var(--text3)">${_formatarData(item.criadoEm)}</td><td><div class="acoes"><button class="btn btn-sm btn-ghost" onclick="CrudUI._iniciarEdicao('${key}', ${item.id})">✏️</button><button class="btn btn-sm btn-danger" onclick="CrudUI._excluir('${key}', ${item.id})">🗑</button></div></td></tr>`;
     }).join('');
   }
-
-  // ---------- FORMULÁRIO ----------
 
   function _coletarForm(key, schema) {
     const dados = {};
     schema.campos.forEach(campo => {
       const el = document.getElementById(`campo-${schema.nome.toLowerCase()}-${campo.nome}`);
-      if (el) {
-        dados[campo.nome] = campo.tipo === 'number'
-          ? (el.value !== '' ? Number(el.value) : '')
-          : el.value;
-      }
+      if (el) dados[campo.nome] = campo.tipo === 'number' ? (el.value !== '' ? Number(el.value) : '') : el.value;
     });
     return dados;
   }
 
   function _resetForm(key) {
-    const schema = Schemas[key];
-    schema.campos.forEach(campo => {
-      const el = document.getElementById(`campo-${schema.nome.toLowerCase()}-${campo.nome}`);
+    Schemas[key].campos.forEach(campo => {
+      const el = document.getElementById(`campo-${Schemas[key].nome.toLowerCase()}-${campo.nome}`);
       if (el) el.value = campo.default ?? '';
     });
   }
-
-  // ---------- ERROS ----------
 
   function _mostrarErros(key, erros) {
     const el = document.getElementById(`form-erros-${key}`);
@@ -324,40 +236,10 @@ const CrudUI = (() => {
     document.getElementById(`form-erros-${key}`)?.classList.add('hidden');
   }
 
-  // ---------- UTILITÁRIOS ----------
-
   function _formatarData(iso) {
     if (!iso) return '—';
-    return new Date(iso).toLocaleString('pt-BR', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
-    });
+    return new Date(iso).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
   }
 
-  // ---------- ESTILOS EXTRAS ----------
-
-  function _injetarStylesExtras() {
-    if (document.getElementById('crud-ui-styles')) return;
-    const style = document.createElement('style');
-    style.id = 'crud-ui-styles';
-    style.textContent = `
-      .form-erros {
-        margin: 0 20px 16px;
-        padding: 10px 14px;
-        background: rgba(218,54,51,0.08);
-        border: 1px solid rgba(218,54,51,0.25);
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        font-size: 12px;
-        color: var(--danger-light);
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // expõe métodos que o HTML inline (onclick) precisa chamar
   return { init, _iniciarEdicao, _excluir };
-
 })();

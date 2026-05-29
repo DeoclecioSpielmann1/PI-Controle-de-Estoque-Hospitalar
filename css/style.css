@@ -38,6 +38,142 @@ body {
 }
 
 /* ===========================
+   TELA DE LOGIN
+=========================== */
+#tela-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.login-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.3s ease;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.login-logo span {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.login-title {
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.login-sub {
+  font-size: 13px;
+  color: var(--text2);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-box .campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.login-box .campo label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.login-box .campo input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 10px 14px;
+  font-family: var(--font);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+}
+
+.login-box .campo input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.login-box .campo input::placeholder {
+  color: var(--text3);
+}
+
+.btn-login {
+  width: 100%;
+  padding: 11px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition);
+  margin-top: 8px;
+}
+
+.btn-login:hover { background: var(--primary-light); }
+
+.login-erro {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(218,54,51,0.1);
+  border: 1px solid rgba(218,54,51,0.25);
+  border-radius: var(--radius);
+  color: var(--danger-light);
+  font-size: 13px;
+  text-align: center;
+  display: none;
+}
+
+.login-erro.visivel { display: block; animation: fadeIn 0.2s ease; }
+
+.login-dica {
+  margin-top: 20px;
+  padding: 10px 14px;
+  background: var(--bg3);
+  border-radius: var(--radius);
+  font-size: 12px;
+  color: var(--text3);
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+/* ===========================
+   SISTEMA PRINCIPAL (oculto até login)
+=========================== */
+#tela-sistema { display: none; }
+#tela-sistema.ativo { display: block; }
+
+/* ===========================
    HEADER
 =========================== */
 .header {
@@ -86,11 +222,35 @@ body {
 .nav-btn:hover { background: var(--bg3); color: var(--text); }
 .nav-btn.active { background: var(--primary-glow); color: var(--primary-light); }
 
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .relogio {
   font-family: var(--mono);
   font-size: 12px;
   color: var(--text3);
   white-space: nowrap;
+}
+
+.btn-sair {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  padding: 5px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  transition: all var(--transition);
+}
+
+.btn-sair:hover {
+  background: rgba(218,54,51,0.1);
+  color: var(--danger-light);
+  border-color: rgba(218,54,51,0.3);
 }
 
 /* ===========================
@@ -120,7 +280,10 @@ body {
 .section { display: none; }
 .section.active { display: block; animation: fadeIn 0.25s ease; }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
 
 .section-title { margin-bottom: 24px; }
 .section-title h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
@@ -354,9 +517,9 @@ input:focus, select:focus {
   white-space: nowrap;
 }
 
-.badge-ok { background: rgba(31,139,76,0.15); color: #4ade80; border: 1px solid rgba(31,139,76,0.3); }
-.badge-baixo { background: rgba(210,153,34,0.15); color: var(--warning-light); border: 1px solid rgba(210,153,34,0.3); }
-.badge-critico { background: rgba(218,54,51,0.15); color: var(--danger-light); border: 1px solid rgba(218,54,51,0.3); }
+.badge-ok      { background: rgba(31,139,76,0.15);  color: #4ade80; border: 1px solid rgba(31,139,76,0.3); }
+.badge-baixo   { background: rgba(210,153,34,0.15); color: var(--warning-light); border: 1px solid rgba(210,153,34,0.3); }
+.badge-critico { background: rgba(218,54,51,0.15);  color: var(--danger-light); border: 1px solid rgba(218,54,51,0.3); }
 .badge-vencido { background: rgba(140,80,200,0.15); color: #c084fc; border: 1px solid rgba(140,80,200,0.3); }
 
 .tag-categoria {
@@ -395,7 +558,7 @@ input:focus, select:focus {
 }
 
 .alerta-item.critico { border-left: 3px solid var(--danger-light); }
-.alerta-item.baixo { border-left: 3px solid var(--warning-light); }
+.alerta-item.baixo   { border-left: 3px solid var(--warning-light); }
 .alerta-item.vencido { border-left: 3px solid #c084fc; }
 
 .alerta-icon { font-size: 20px; flex-shrink: 0; }
@@ -435,7 +598,10 @@ input:focus, select:focus {
   animation: modalIn 0.2s ease;
 }
 
-@keyframes modalIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
 
 .modal-header {
   display: flex;
@@ -464,6 +630,22 @@ input:focus, select:focus {
   justify-content: flex-end;
   padding: 16px 20px;
   border-top: 1px solid var(--border);
+}
+
+/* ===========================
+   CRUD UI — ERROS DE FORMULÁRIO
+=========================== */
+.form-erros {
+  margin: 0 20px 16px;
+  padding: 10px 14px;
+  background: rgba(218,54,51,0.08);
+  border: 1px solid rgba(218,54,51,0.25);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--danger-light);
 }
 
 /* ===========================
