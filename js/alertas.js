@@ -1,11 +1,9 @@
-// ============================================================
 //  alertas.js — Central de alertas do estoque hospitalar
-// ============================================================
 
 const Alertas = (() => {
 
   function getAlertas() {
-    const itens   = Estoque.carregarItens();
+    const itens = Estoque.carregarItens();
     const alertas = [];
 
     itens.forEach(item => {
@@ -13,9 +11,9 @@ const Alertas = (() => {
 
       if (status === 'critico') {
         alertas.push({
-          tipo:     'critico',
-          icon:     '🚨',
-          titulo:   item.nome,
+          tipo: 'critico',
+          icon: '🚨',
+          titulo: item.nome,
           descricao: item.quantidade === 0
             ? 'Estoque zerado! Necessita reposição imediata.'
             : `Estoque crítico: ${item.quantidade} ${item.unidade || 'unid'} (mínimo: ${item.estoqueMinimo})`,
@@ -23,22 +21,22 @@ const Alertas = (() => {
         });
       } else if (status === 'baixo') {
         alertas.push({
-          tipo:      'baixo',
-          icon:      '⚠️',
-          titulo:    item.nome,
+          tipo: 'baixo',
+          icon: '⚠️',
+          titulo: item.nome,
           descricao: `Estoque abaixo do mínimo: ${item.quantidade} ${item.unidade || 'unid'} (mínimo: ${item.estoqueMinimo})`,
           item
         });
       } else if (status === 'vencido') {
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
-        const val  = new Date(item.validade + 'T00:00:00');
+        const val = new Date(item.validade + 'T00:00:00');
         const diff = Math.round((val - hoje) / (1000 * 60 * 60 * 24));
 
         alertas.push({
-          tipo:      'vencido',
-          icon:      '📅',
-          titulo:    item.nome,
+          tipo: 'vencido',
+          icon: '📅',
+          titulo: item.nome,
           descricao: diff < 0
             ? `Produto vencido em ${_formatarData(item.validade)}. Retirar do estoque.`
             : `Vence em ${diff} dia(s) — ${_formatarData(item.validade)}. Verificar substituição.`,

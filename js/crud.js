@@ -1,11 +1,9 @@
-// ============================================================
 //  crud.js — Motor CRUD genérico
-// ============================================================
 
 class CrudRepository {
   constructor(entidade, schema) {
-    this.entidade   = entidade;
-    this.schema     = schema;
+    this.entidade = entidade;
+    this.schema = schema;
     this.storageKey = `estoqueHosp_${entidade}`;
   }
 
@@ -89,53 +87,65 @@ class CrudRepository {
   limparTudo() { this._salvar([]); return { sucesso: true }; }
 }
 
-// ============================================================
 //  Schemas
-// ============================================================
 
 const Schemas = {
   fornecedores: {
     nome: 'Fornecedor',
     campos: [
-      { nome: 'razaoSocial', label: 'Razão Social',  tipo: 'text',   obrigatorio: true },
-      { nome: 'cnpj',        label: 'CNPJ',           tipo: 'text',   obrigatorio: false },
-      { nome: 'contato',     label: 'Contato',        tipo: 'text',   obrigatorio: false },
-      { nome: 'telefone',    label: 'Telefone',       tipo: 'text',   obrigatorio: false },
-      { nome: 'email',       label: 'E-mail',         tipo: 'email',  obrigatorio: false },
-      { nome: 'categoria',   label: 'Categoria',      tipo: 'select', obrigatorio: false,
-        opcoes: ['Medicamentos','Materiais','Equipamentos','EPI','Outros'] },
-      { nome: 'ativo',       label: 'Ativo',          tipo: 'select', obrigatorio: false,
-        opcoes: ['Sim','Não'], default: 'Sim' }
+      { nome: 'razaoSocial', label: 'Razão Social', tipo: 'text', obrigatorio: true },
+      { nome: 'cnpj', label: 'CNPJ', tipo: 'text', obrigatorio: false },
+      { nome: 'contato', label: 'Contato', tipo: 'text', obrigatorio: false },
+      { nome: 'telefone', label: 'Telefone', tipo: 'text', obrigatorio: false },
+      { nome: 'email', label: 'E-mail', tipo: 'email', obrigatorio: false },
+      {
+        nome: 'categoria', label: 'Categoria', tipo: 'select', obrigatorio: false,
+        opcoes: ['Medicamentos', 'Materiais', 'Equipamentos', 'EPI', 'Outros']
+      },
+      {
+        nome: 'ativo', label: 'Ativo', tipo: 'select', obrigatorio: false,
+        opcoes: ['Sim', 'Não'], default: 'Sim'
+      }
     ]
   },
   usuarios: {
     nome: 'Usuário',
     campos: [
-      { nome: 'nome',      label: 'Nome Completo', tipo: 'text',   obrigatorio: true },
-      { nome: 'matricula', label: 'Matrícula',     tipo: 'text',   obrigatorio: false },
-      { nome: 'cargo',     label: 'Cargo',         tipo: 'select', obrigatorio: false,
-        opcoes: ['Farmacêutico','Enfermeiro','Médico','Técnico','Administrativo','Outro'] },
-      { nome: 'setor',     label: 'Setor',         tipo: 'text',   obrigatorio: false },
-      { nome: 'email',     label: 'E-mail',        tipo: 'email',  obrigatorio: false },
-      { nome: 'perfil',    label: 'Perfil',        tipo: 'select', obrigatorio: false,
-        opcoes: ['Administrador','Operador','Visualizador'], default: 'Operador' },
-      { nome: 'ativo',     label: 'Ativo',         tipo: 'select', obrigatorio: false,
-        opcoes: ['Sim','Não'], default: 'Sim' }
+      { nome: 'nome', label: 'Nome Completo', tipo: 'text', obrigatorio: true },
+      { nome: 'matricula', label: 'Matrícula', tipo: 'text', obrigatorio: false },
+      {
+        nome: 'cargo', label: 'Cargo', tipo: 'select', obrigatorio: false,
+        opcoes: ['Farmacêutico', 'Enfermeiro', 'Médico', 'Técnico', 'Administrativo', 'Outro']
+      },
+      { nome: 'setor', label: 'Setor', tipo: 'text', obrigatorio: false },
+      { nome: 'email', label: 'E-mail', tipo: 'email', obrigatorio: false },
+      {
+        nome: 'perfil', label: 'Perfil', tipo: 'select', obrigatorio: false,
+        opcoes: ['Administrador', 'Operador', 'Visualizador'], default: 'Operador'
+      },
+      {
+        nome: 'ativo', label: 'Ativo', tipo: 'select', obrigatorio: false,
+        opcoes: ['Sim', 'Não'], default: 'Sim'
+      }
     ]
   },
   categorias: {
     nome: 'Categoria',
     campos: [
-      { nome: 'nome',      label: 'Nome da Categoria', tipo: 'text',   obrigatorio: true },
-      { nome: 'descricao', label: 'Descrição',         tipo: 'text',   obrigatorio: false },
-      { nome: 'cor',       label: 'Cor',               tipo: 'select', obrigatorio: false,
-        opcoes: ['Verde','Azul','Amarelo','Vermelho','Roxo','Cinza'], default: 'Cinza' },
-      { nome: 'ativo',     label: 'Ativo',             tipo: 'select', obrigatorio: false,
-        opcoes: ['Sim','Não'], default: 'Sim' }
+      { nome: 'nome', label: 'Nome da Categoria', tipo: 'text', obrigatorio: true },
+      { nome: 'descricao', label: 'Descrição', tipo: 'text', obrigatorio: false },
+      {
+        nome: 'cor', label: 'Cor', tipo: 'select', obrigatorio: false,
+        opcoes: ['Verde', 'Azul', 'Amarelo', 'Vermelho', 'Roxo', 'Cinza'], default: 'Cinza'
+      },
+      {
+        nome: 'ativo', label: 'Ativo', tipo: 'select', obrigatorio: false,
+        opcoes: ['Sim', 'Não'], default: 'Sim'
+      }
     ]
   }
 };
 
 const RepFornecedores = new CrudRepository('fornecedores', Schemas.fornecedores);
-const RepUsuarios     = new CrudRepository('usuarios',     Schemas.usuarios);
-const RepCategorias   = new CrudRepository('categorias',   Schemas.categorias);
+const RepUsuarios = new CrudRepository('usuarios', Schemas.usuarios);
+const RepCategorias = new CrudRepository('categorias', Schemas.categorias);

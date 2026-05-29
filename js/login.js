@@ -1,6 +1,4 @@
-// ============================================================
 //  login.js — Controle de autenticação
-// ============================================================
 
 const Login = (() => {
 
@@ -25,7 +23,7 @@ const Login = (() => {
   // Tenta fazer login com usuário e senha informados
   function tentarLogin() {
     const usuario = document.getElementById('login-usuario').value.trim();
-    const senha   = document.getElementById('login-senha').value;
+    const senha = document.getElementById('login-senha').value;
 
     if (!usuario || !senha) {
       _mostrarErro('Preencha o usuário e a senha.');
@@ -65,7 +63,7 @@ const Login = (() => {
     // Mostra o nome do usuário logado, se o elemento existir
     const el = document.getElementById('nome-usuario-logado');
     if (el) el.textContent = nomeUsuario;
-    // Inicializa o sistema (nav, relógio, dashboard, etc.)
+    // Inicializa o sistema (nav, relógio, painel geral, etc.)
     if (typeof iniciarSistema === 'function') iniciarSistema();
   }
 
@@ -100,9 +98,8 @@ const Login = (() => {
 
 })();
 
-// ============================================================
 //  Inicializa o login quando o DOM estiver pronto
-// ============================================================
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // Se já tem sessão ativa, vai direto pro sistema

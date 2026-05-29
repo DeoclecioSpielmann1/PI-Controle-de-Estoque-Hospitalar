@@ -1,13 +1,11 @@
-// ============================================================
 //  estoque.js — Lógica de negócio do estoque hospitalar
-// ============================================================
 
 const Estoque = (() => {
 
   const CHAVE_ITENS = 'estoqueHosp_itens';
-  const CHAVE_MOVS  = 'estoqueHosp_movimentacoes';
+  const CHAVE_MOVS = 'estoqueHosp_movimentacoes';
 
-  // ---------- PERSISTÊNCIA ----------
+  // -- PERSISTÊNCIA --
 
   function carregarItens() {
     try {
@@ -29,11 +27,11 @@ const Estoque = (() => {
     localStorage.setItem(CHAVE_MOVS, JSON.stringify(movs));
   }
 
-  // ---------- CRUD ----------
+  // -- CRUD --
 
   function adicionarItem(dados) {
     const itens = carregarItens();
-    const novo  = { id: Date.now(), ...dados };
+    const novo = { id: Date.now(), ...dados };
     itens.push(novo);
     _salvarItens(itens);
     return novo;
@@ -45,7 +43,7 @@ const Estoque = (() => {
 
   function editarItem(id, dados) {
     const itens = carregarItens();
-    const idx   = itens.findIndex(i => i.id === Number(id));
+    const idx = itens.findIndex(i => i.id === Number(id));
     if (idx === -1) return null;
     itens[idx] = { ...itens[idx], ...dados };
     _salvarItens(itens);
@@ -57,14 +55,14 @@ const Estoque = (() => {
     _salvarItens(itens);
   }
 
-  // ---------- STATUS ----------
+  // -- STATUS --
 
   function getStatus(item) {
     // Verifica validade primeiro
     if (item.validade) {
       const hoje = new Date();
       hoje.setHours(0, 0, 0, 0);
-      const val  = new Date(item.validade + 'T00:00:00');
+      const val = new Date(item.validade + 'T00:00:00');
       const diff = Math.round((val - hoje) / (1000 * 60 * 60 * 24));
       if (diff <= 30) return 'vencido';
     }
@@ -79,21 +77,21 @@ const Estoque = (() => {
 
   function getLabelStatus(status) {
     const mapa = {
-      ok:      { label: 'Normal',  badge: 'badge-ok'      },
-      baixo:   { label: 'Baixo',   badge: 'badge-baixo'   },
+      ok: { label: 'Normal', badge: 'badge-ok' },
+      baixo: { label: 'Baixo', badge: 'badge-baixo' },
       critico: { label: 'Crítico', badge: 'badge-critico' },
       vencido: { label: 'Vencido', badge: 'badge-vencido' },
     };
     return mapa[status] || mapa.ok;
   }
 
-  // ---------- MOVIMENTAÇÕES ----------
+  // -- MOVIMENTAÇÕES --
 
   function registrarMovimentacao(id, tipo, quantidade, responsavel) {
     const item = buscarItem(id);
     if (!item) return { sucesso: false, msg: 'Item não encontrado.' };
 
-    const qtd     = Number(quantidade);
+    const qtd = Number(quantidade);
     const novaQtd = tipo === 'entrada'
       ? item.quantidade + qtd
       : item.quantidade - qtd;
@@ -107,20 +105,20 @@ const Estoque = (() => {
     // Salva no histórico (máximo 100 registros)
     const movs = carregarMovimentacoes();
     movs.unshift({
-      id:          Date.now(),
-      itemId:      item.id,
-      itemNome:    item.nome,
+      id: Date.now(),
+      itemId: item.id,
+      itemNome: item.nome,
       tipo,
-      quantidade:  qtd,
+      quantidade: qtd,
       responsavel: responsavel || '',
-      data:        new Date().toISOString()
+      data: new Date().toISOString()
     });
     _salvarMovimentacoes(movs.slice(0, 100));
 
     return { sucesso: true };
   }
 
-  // ---------- FILTROS ----------
+  // -- FILTROS --
 
   function filtrarItens(filtros = {}) {
     let itens = carregarItens();
@@ -145,14 +143,14 @@ const Estoque = (() => {
     return itens;
   }
 
-  // ---------- ESTATÍSTICAS ----------
+  // -- ESTATÍSTICAS --
 
   function getStats() {
     const itens = carregarItens();
     return {
-      total:    itens.length,
-      ok:       itens.filter(i => getStatus(i) === 'ok').length,
-      baixos:   itens.filter(i => getStatus(i) === 'baixo').length,
+      total: itens.length,
+      ok: itens.filter(i => getStatus(i) === 'ok').length,
+      baixos: itens.filter(i => getStatus(i) === 'baixo').length,
       criticos: itens.filter(i => getStatus(i) === 'critico').length,
       vencidos: itens.filter(i => getStatus(i) === 'vencido').length,
     };

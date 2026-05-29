@@ -22,7 +22,6 @@ function resetDOM(ids = []) {
   global.document = doc;
 }
 
-// =============================================================
 describe('Alertas — getAlertas', () => {
   beforeEach(limpar);
 
@@ -67,14 +66,14 @@ describe('Alertas — getAlertas', () => {
 describe('Alertas — ordenação (critico → vencido → baixo)', () => {
   beforeEach(() => {
     limpar();
-    inserir({ nome: 'Baixo',   quantidade: 15, estoqueMinimo: 20, validade: '2099-12-31' });
-    inserir({ nome: 'Critico', quantidade: 0,  estoqueMinimo: 20, validade: '2099-12-31' });
-    inserir({ nome: 'Vencido', quantidade: 50, estoqueMinimo: 5,  validade: '2000-01-01' });
+    inserir({ nome: 'Baixo', quantidade: 15, estoqueMinimo: 20, validade: '2099-12-31' });
+    inserir({ nome: 'Critico', quantidade: 0, estoqueMinimo: 20, validade: '2099-12-31' });
+    inserir({ nome: 'Vencido', quantidade: 50, estoqueMinimo: 5, validade: '2000-01-01' });
   });
 
   test('primeiro é "critico"', () => { expect(ctx.Alertas.getAlertas()[0].tipo).toBe('critico'); });
-  test('segundo é "vencido"',  () => { expect(ctx.Alertas.getAlertas()[1].tipo).toBe('vencido'); });
-  test('terceiro é "baixo"',   () => { expect(ctx.Alertas.getAlertas()[2].tipo).toBe('baixo');   });
+  test('segundo é "vencido"', () => { expect(ctx.Alertas.getAlertas()[1].tipo).toBe('vencido'); });
+  test('terceiro é "baixo"', () => { expect(ctx.Alertas.getAlertas()[2].tipo).toBe('baixo'); });
 });
 
 describe('Alertas — atualizarBanner', () => {

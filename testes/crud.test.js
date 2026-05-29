@@ -46,7 +46,7 @@ describe('CrudRepository — listar e buscarPorId', () => {
     repo = novoRepo('fornecedores');
     repo.criar({ razaoSocial: 'Alfa Medicamentos', categoria: 'Medicamentos' });
     repo.criar({ razaoSocial: 'Beta Equipamentos', categoria: 'Equipamentos' });
-    repo.criar({ razaoSocial: 'Gama EPI',          categoria: 'EPI' });
+    repo.criar({ razaoSocial: 'Gama EPI', categoria: 'EPI' });
   });
 
   test('lista todos sem filtros', () => { expect(repo.listar().length).toBe(3); });

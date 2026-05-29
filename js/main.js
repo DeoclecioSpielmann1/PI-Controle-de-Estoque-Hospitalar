@@ -6,14 +6,16 @@ function initNav() {
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.dataset.section;
+      const sectionId = 'section-' + target.replace(/\s+/g, '-');
+
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById('section-' + target)?.classList.add('active');
+      document.getElementById(sectionId)?.classList.add('active');
 
       if (target === 'painel geral') renderPainelGeral();
-      if (target === 'estoque')   renderTabelaEstoque();
-      if (target === 'alertas')   Alertas.renderizarAlertas();
+      if (target === 'estoque') renderTabelaEstoque();
+      if (target === 'alertas') Alertas.renderizarAlertas();
     });
   });
 }
@@ -66,7 +68,7 @@ function renderPainelGeral() {
     </div>
   `;
 
-  const movs  = Estoque.carregarMovimentacoes().slice(0, 10);
+  const movs = Estoque.carregarMovimentacoes().slice(0, 10);
   const tbody = document.getElementById('tbody-movimentacoes');
 
   if (movs.length === 0) {
@@ -99,7 +101,7 @@ function renderTabelaEstoque(filtros = {}) {
 
   vazio.classList.add('hidden');
   tbody.innerHTML = itens.map(item => {
-    const status          = Estoque.getStatus(item);
+    const status = Estoque.getStatus(item);
     const { label, badge } = Estoque.getLabelStatus(status);
     return `
       <tr>
@@ -127,11 +129,11 @@ function renderTabelaEstoque(filtros = {}) {
 let idEmEdicao = null;
 
 function limparFormulario() {
-  ['input-nome','input-categoria','input-quantidade','input-minimo',
-   'input-unidade','input-validade','input-localizacao'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
+  ['input-nome', 'input-categoria', 'input-quantidade', 'input-minimo',
+    'input-unidade', 'input-validade', 'input-localizacao'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
 }
 
 function iniciarEdicao(id) {
@@ -139,16 +141,16 @@ function iniciarEdicao(id) {
   if (!item) return;
 
   idEmEdicao = id;
-  document.getElementById('input-nome').value        = item.nome || '';
-  document.getElementById('input-categoria').value   = item.categoria || '';
-  document.getElementById('input-quantidade').value  = item.quantidade || 0;
-  document.getElementById('input-minimo').value      = item.estoqueMinimo || 0;
-  document.getElementById('input-unidade').value     = item.unidade || '';
-  document.getElementById('input-validade').value    = item.validade || '';
+  document.getElementById('input-nome').value = item.nome || '';
+  document.getElementById('input-categoria').value = item.categoria || '';
+  document.getElementById('input-quantidade').value = item.quantidade || 0;
+  document.getElementById('input-minimo').value = item.estoqueMinimo || 0;
+  document.getElementById('input-unidade').value = item.unidade || '';
+  document.getElementById('input-validade').value = item.validade || '';
   document.getElementById('input-localizacao').value = item.localizacao || '';
 
-  document.getElementById('form-titulo').textContent           = 'Editar Item';
-  document.getElementById('btn-salvar').textContent            = '💾 Salvar Alterações';
+  document.getElementById('form-titulo').textContent = 'Editar Item';
+  document.getElementById('btn-salvar').textContent = '💾 Salvar Alterações';
   document.getElementById('btn-cancelar-edicao').style.display = 'inline-flex';
 
   document.querySelector('#section-estoque').scrollIntoView({ behavior: 'smooth' });
@@ -157,8 +159,8 @@ function iniciarEdicao(id) {
 function cancelarEdicao() {
   idEmEdicao = null;
   limparFormulario();
-  document.getElementById('form-titulo').textContent           = 'Adicionar Item';
-  document.getElementById('btn-salvar').textContent            = '＋ Adicionar Item';
+  document.getElementById('form-titulo').textContent = 'Adicionar Item';
+  document.getElementById('btn-salvar').textContent = '＋ Adicionar Item';
   document.getElementById('btn-cancelar-edicao').style.display = 'none';
 }
 
@@ -168,12 +170,12 @@ function salvarItem() {
 
   const dados = {
     nome,
-    categoria:     document.getElementById('input-categoria').value,
-    quantidade:    parseInt(document.getElementById('input-quantidade').value) || 0,
+    categoria: document.getElementById('input-categoria').value,
+    quantidade: parseInt(document.getElementById('input-quantidade').value) || 0,
     estoqueMinimo: parseInt(document.getElementById('input-minimo').value) || 0,
-    unidade:       document.getElementById('input-unidade').value.trim(),
-    validade:      document.getElementById('input-validade').value,
-    localizacao:   document.getElementById('input-localizacao').value.trim()
+    unidade: document.getElementById('input-unidade').value.trim(),
+    validade: document.getElementById('input-validade').value,
+    localizacao: document.getElementById('input-localizacao').value.trim()
   };
 
   if (idEmEdicao) {
@@ -206,9 +208,9 @@ function abrirModalMovimentacao(id) {
   if (!item) return;
   itemMovAtivo = id;
   document.getElementById('modal-item-nome').textContent = item.nome;
-  document.getElementById('mov-qtd').value        = '';
+  document.getElementById('mov-qtd').value = '';
   document.getElementById('mov-responsavel').value = '';
-  document.getElementById('mov-tipo').value        = 'entrada';
+  document.getElementById('mov-tipo').value = 'entrada';
   document.getElementById('modal-mov').classList.remove('hidden');
 }
 
@@ -218,8 +220,8 @@ function fecharModal() {
 }
 
 function confirmarMovimentacao() {
-  const tipo        = document.getElementById('mov-tipo').value;
-  const qtd         = parseInt(document.getElementById('mov-qtd').value);
+  const tipo = document.getElementById('mov-tipo').value;
+  const qtd = parseInt(document.getElementById('mov-qtd').value);
   const responsavel = document.getElementById('mov-responsavel').value.trim();
 
   if (!qtd || qtd <= 0) { alert('Informe uma quantidade válida.'); return; }
@@ -237,14 +239,14 @@ function confirmarMovimentacao() {
 
 function getFiltrosAtivos() {
   return {
-    busca:     document.getElementById('filtro-busca')?.value || '',
+    busca: document.getElementById('filtro-busca')?.value || '',
     categoria: document.getElementById('filtro-categoria')?.value || '',
-    status:    document.getElementById('filtro-status')?.value || ''
+    status: document.getElementById('filtro-status')?.value || ''
   };
 }
 
 function initFiltros() {
-  ['filtro-busca','filtro-categoria','filtro-status'].forEach(id => {
+  ['filtro-busca', 'filtro-categoria', 'filtro-status'].forEach(id => {
     document.getElementById(id)
       ?.addEventListener('input', () => renderTabelaEstoque(getFiltrosAtivos()));
   });

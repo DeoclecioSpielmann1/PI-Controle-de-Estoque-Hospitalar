@@ -1,16 +1,14 @@
-// ============================================================
 //  crud-ui.js — Interface visual CRUD
-// ============================================================
 
 const CrudUI = (() => {
   const repositorios = {
     fornecedores: () => RepFornecedores,
-    usuarios:     () => RepUsuarios,
-    categorias:   () => RepCategorias
+    usuarios: () => RepUsuarios,
+    categorias: () => RepCategorias
   };
 
   let entidadeAtiva = null;
-  let idEmEdicao    = null;
+  let idEmEdicao = null;
 
   function init() {
     _injetarNavButtons();
@@ -22,8 +20,8 @@ const CrudUI = (() => {
     if (!nav) return;
     const entidades = [
       { key: 'fornecedores', label: 'Fornecedores' },
-      { key: 'usuarios',     label: 'Usuários' },
-      { key: 'categorias',   label: 'Categorias' }
+      { key: 'usuarios', label: 'Usuários' },
+      { key: 'categorias', label: 'Categorias' }
     ];
     entidades.forEach(({ key, label }) => {
       if (nav.querySelector(`[data-section="${key}"]`)) return;
@@ -42,7 +40,7 @@ const CrudUI = (() => {
     Object.keys(Schemas).forEach(key => {
       if (document.getElementById(`section-${key}`)) return;
       const section = document.createElement('section');
-      section.id        = `section-${key}`;
+      section.id = `section-${key}`;
       section.className = 'section';
       section.innerHTML = _templateSection(key);
       main.appendChild(section);
@@ -56,7 +54,7 @@ const CrudUI = (() => {
     document.querySelector(`[data-section="${key}"]`)?.classList.add('active');
     document.getElementById(`section-${key}`)?.classList.add('active');
     entidadeAtiva = key;
-    idEmEdicao    = null;
+    idEmEdicao = null;
     _renderTabela(key);
     _resetForm(key);
   }
@@ -128,9 +126,9 @@ const CrudUI = (() => {
   }
 
   function _salvar(key) {
-    const rep    = repositorios[key]();
+    const rep = repositorios[key]();
     const schema = Schemas[key];
-    const dados  = _coletarForm(key, schema);
+    const dados = _coletarForm(key, schema);
     const resultado = idEmEdicao ? rep.atualizar(idEmEdicao, dados) : rep.criar(dados);
     if (!resultado.sucesso) { _mostrarErros(key, resultado.erros); return; }
     _esconderErros(key);
@@ -139,23 +137,23 @@ const CrudUI = (() => {
   }
 
   function _iniciarEdicao(key, id) {
-    const rep    = repositorios[key]();
+    const rep = repositorios[key]();
     const schema = Schemas[key];
-    const item   = rep.buscarPorId(id);
+    const item = rep.buscarPorId(id);
     if (!item) return;
     idEmEdicao = id;
     schema.campos.forEach(campo => {
       const el = document.getElementById(`campo-${schema.nome.toLowerCase()}-${campo.nome}`);
       if (el) el.value = item[campo.nome] ?? '';
     });
-    document.getElementById(`form-titulo-${key}`).textContent    = `Editar ${schema.nome}`;
-    document.getElementById(`btn-salvar-${key}`).textContent     = '💾 Salvar';
+    document.getElementById(`form-titulo-${key}`).textContent = `Editar ${schema.nome}`;
+    document.getElementById(`btn-salvar-${key}`).textContent = '💾 Salvar';
     document.getElementById(`btn-cancelar-${key}`).style.display = 'inline-flex';
     document.getElementById(`form-card-${key}`)?.scrollIntoView({ behavior: 'smooth' });
   }
 
   function _excluir(key, id) {
-    const rep  = repositorios[key]();
+    const rep = repositorios[key]();
     const item = rep.buscarPorId(id);
     if (!item) return;
     const nomeItem = item.razaoSocial || item.nome || `#${id}`;
@@ -167,14 +165,14 @@ const CrudUI = (() => {
   function _cancelarEdicao(key) {
     idEmEdicao = null;
     _resetForm(key);
-    document.getElementById(`form-titulo-${key}`).textContent    = `Novo ${Schemas[key].nome}`;
-    document.getElementById(`btn-salvar-${key}`).textContent     = '＋ Adicionar';
+    document.getElementById(`form-titulo-${key}`).textContent = `Novo ${Schemas[key].nome}`;
+    document.getElementById(`btn-salvar-${key}`).textContent = '＋ Adicionar';
     document.getElementById(`btn-cancelar-${key}`).style.display = 'none';
     _esconderErros(key);
   }
 
   function _renderTabela(key) {
-    const rep    = repositorios[key]();
+    const rep = repositorios[key]();
     const schema = Schemas[key];
     const filtros = { busca: document.getElementById(`busca-${key}`)?.value || '' };
     const filtroAtivo = document.getElementById(`filtro-ativo-${key}`)?.value;
@@ -188,7 +186,7 @@ const CrudUI = (() => {
 
     const tbody = document.getElementById(`tbody-${key}`);
     const vazio = document.getElementById(`vazio-${key}`);
-    const cont  = document.getElementById(`contagem-${key}`);
+    const cont = document.getElementById(`contagem-${key}`);
 
     if (cont) cont.textContent = `${registros.length} registro(s)`;
 
@@ -238,7 +236,7 @@ const CrudUI = (() => {
 
   function _formatarData(iso) {
     if (!iso) return '—';
-    return new Date(iso).toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
   return { init, _iniciarEdicao, _excluir };
