@@ -11,7 +11,7 @@ function initNav() {
       btn.classList.add('active');
       document.getElementById('section-' + target)?.classList.add('active');
 
-      if (target === 'dashboard') renderDashboard();
+      if (target === 'painel geral') renderPainelGeral();
       if (target === 'estoque')   renderTabelaEstoque();
       if (target === 'alertas')   Alertas.renderizarAlertas();
     });
@@ -33,9 +33,9 @@ function initRelogio() {
   setInterval(atualizar, 1000);
 }
 
-// -- DASHBOARD --
+// -- PAINEL GERAL --
 
-function renderDashboard() {
+function renderPainelGeral() {
   const stats = Estoque.getStats();
 
   document.getElementById('cards-dashboard').innerHTML = `
@@ -266,12 +266,12 @@ function formatarDataHora(iso) {
   });
 }
 
-// ---------- INICIALIZAÇÃO DO SISTEMA ----------
+// -- INICIALIZAÇÃO DO SISTEMA --
 
 function iniciarSistema() {
   initNav();
   initRelogio();
-  renderDashboard();
+  renderPainelGeral();
   initFiltros();
 
   document.getElementById('btn-salvar')
