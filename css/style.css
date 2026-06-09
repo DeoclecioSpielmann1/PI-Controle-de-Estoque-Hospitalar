@@ -1,6 +1,4 @@
-/* ===========================
-   VARIÁVEIS & RESET
-=========================== */
+/* VARIÁVEIS & RESET */
 :root {
   --bg: #0d1117;
   --bg2: #161b22;
@@ -37,9 +35,7 @@ body {
   line-height: 1.5;
 }
 
-/* ===========================
-   TELA DE LOGIN
-=========================== */
+/* TELA DE LOGIN  */
 #tela-login {
   display: flex;
   align-items: center;
@@ -167,15 +163,11 @@ body {
   border: 1px solid var(--border);
 }
 
-/* ===========================
-   SISTEMA PRINCIPAL (oculto até login)
-=========================== */
+/* SISTEMA PRINCIPAL (oculto até login) */
 #tela-sistema { display: none; }
 #tela-sistema.ativo { display: block; }
 
-/* ===========================
-   HEADER
-=========================== */
+/* HEADER */
 .header {
   display: flex;
   align-items: center;
@@ -253,9 +245,7 @@ body {
   border-color: rgba(218,54,51,0.3);
 }
 
-/* ===========================
-   ALERTAS BANNER
-=========================== */
+/* ALERTAS BANNER */
 .alertas-banner {
   background: linear-gradient(90deg, rgba(218,54,51,0.12), rgba(218,54,51,0.05));
   border-bottom: 1px solid rgba(218,54,51,0.3);
@@ -268,9 +258,7 @@ body {
   gap: 8px;
 }
 
-/* ===========================
-   MAIN & SECTIONS
-=========================== */
+/* MAIN & SECTIONS */
 .main {
   max-width: 1200px;
   margin: 0 auto;
@@ -289,9 +277,7 @@ body {
 .section-title h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
 .section-title p { color: var(--text2); font-size: 13px; margin-top: 3px; }
 
-/* ===========================
-   CARDS
-=========================== */
+/* CARDS */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -339,9 +325,7 @@ body {
 .dashboard-bottom { margin-top: 0; }
 .tabela-card { margin-top: 0; }
 
-/* ===========================
-   FORMULÁRIO
-=========================== */
+/* FORMULÁRIO */
 .form-card { margin-bottom: 20px; }
 
 .form-grid {
@@ -395,9 +379,7 @@ input:focus, select:focus {
   gap: 10px;
 }
 
-/* ===========================
-   BOTÕES
-=========================== */
+/* BOTÕES */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -424,9 +406,7 @@ input:focus, select:focus {
 .btn-info { background: rgba(31,111,235,0.1); color: var(--info-light); border: 1px solid rgba(31,111,235,0.2); }
 .btn-info:hover { background: rgba(31,111,235,0.2); }
 
-/* ===========================
-   FILTROS
-=========================== */
+/* FILTROS */
 .filtros {
   display: flex;
   gap: 12px;
@@ -465,9 +445,7 @@ input:focus, select:focus {
 
 .select-filtro:focus { border-color: var(--primary); }
 
-/* ===========================
-   TABELA
-=========================== */
+/* TABELA */
 .tabela-card { overflow: auto; }
 
 .tabela {
@@ -504,9 +482,7 @@ input:focus, select:focus {
 
 .tabela .acoes { display: flex; gap: 6px; }
 
-/* ===========================
-   STATUS BADGES
-=========================== */
+/* STATUS BADGES */
 .badge {
   display: inline-block;
   padding: 3px 10px;
@@ -532,9 +508,7 @@ input:focus, select:focus {
   border: 1px solid var(--border);
 }
 
-/* ===========================
-   VAZIO
-=========================== */
+/* VAZIO */
 .vazio {
   padding: 48px;
   text-align: center;
@@ -542,9 +516,7 @@ input:focus, select:focus {
   font-size: 13px;
 }
 
-/* ===========================
-   ALERTAS PAGE
-=========================== */
+/* ALERTAS PAGE */
 .alerta-item {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -574,9 +546,7 @@ input:focus, select:focus {
 
 .alerta-vazio .alerta-vazio-icon { font-size: 40px; margin-bottom: 12px; }
 
-/* ===========================
-   MODAL
-=========================== */
+/* MODAL */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -632,9 +602,7 @@ input:focus, select:focus {
   border-top: 1px solid var(--border);
 }
 
-/* ===========================
-   CRUD UI — ERROS DE FORMULÁRIO
-=========================== */
+/* CRUD UI — ERROS DE FORMULÁRIO */
 .form-erros {
   margin: 0 20px 16px;
   padding: 10px 14px;
@@ -648,7 +616,5 @@ input:focus, select:focus {
   color: var(--danger-light);
 }
 
-/* ===========================
-   UTILITÁRIOS
-=========================== */
+/* UTILITÁRIOS */
 .hidden { display: none !important; }

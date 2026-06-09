@@ -135,10 +135,6 @@ const Schemas = {
       { nome: 'nome', label: 'Nome da Categoria', tipo: 'text', obrigatorio: true },
       { nome: 'descricao', label: 'Descrição', tipo: 'text', obrigatorio: false },
       {
-        nome: 'cor', label: 'Cor', tipo: 'select', obrigatorio: false,
-        opcoes: ['Verde', 'Azul', 'Amarelo', 'Vermelho', 'Roxo', 'Cinza'], default: 'Cinza'
-      },
-      {
         nome: 'ativo', label: 'Ativo', tipo: 'select', obrigatorio: false,
         opcoes: ['Sim', 'Não'], default: 'Sim'
       }
